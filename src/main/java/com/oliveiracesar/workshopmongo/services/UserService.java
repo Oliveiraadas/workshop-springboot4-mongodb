@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.oliveiracesar.workshopmongo.domain.User;
 import com.oliveiracesar.workshopmongo.repository.UserRepository;
+import com.sun.jdi.ObjectCollectedException;
 
 @Service
 public class UserService {
@@ -17,5 +18,13 @@ public class UserService {
 	public List<User> findAll() {
 
 		return repo.findAll();
+	}
+	
+	public User findById(String id) {
+		User user = repo.findById(id).orElse(null);
+		if (user == null) {
+			throw new ObjectCollectedException("Objeto não enontrado");
+		}
+		return user;
 	}
 }
