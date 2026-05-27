@@ -18,24 +18,40 @@ import com.oliveiracesar.workshopmongo.services.PostService;
 @RequestMapping(value = "/posts")
 public class PostResource {
 
-    @Autowired
-    private PostService service;
+	@Autowired
+	private PostService service;
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Post> findById(@PathVariable String id) {
-        Post obj = service.findById(id);
-        return ResponseEntity.ok().body(obj);
-    }
-    
-    @RequestMapping(value = "/titlesearch", method = RequestMethod.GET)
-    public ResponseEntity<List<Post>> findByTitle(@RequestParam(value="text", defaultValue="") String text) {
-        // 💡 CORREÇÃO: Usa o utilitário URL para decodificar o texto que veio da URL
-        text = URL.decodeParam(text);
-        
-        // Busca a lista de posts que contêm o texto no título
-        List<Post> list = service.findByTitle(text);
-        
-        return ResponseEntity.ok().body(list);
-    }
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Post> findById(@PathVariable String id) {
+		Post obj = service.findById(id);
+		return ResponseEntity.ok().body(obj);
+	}
+
+	@RequestMapping(value = "/titlesearch", method = RequestMethod.GET)
+	public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text", defaultValue = "") String text) {
+
+		text = URL.decodeParam(text);
+
+		List<Post> list = service.findByTitle(text);
+
+		return ResponseEntity.ok().body(list);
+	}
+
+	@RequestMapping(value = "/fullsearch", method = RequestMethod.GET)
+	public ResponseEntity<List<Post>> fullSearch(@RequestParam(value = "text", defaultValue = "") String text,
+			@RequestParam(value = "minDate", defaultValue = "") String minDate,
+			@RequestParam(value = "maxDate", defaultValue = "") String maxDate) {
+
+		text = com.oliveiracesar.workshopmongo.resources.util.URL.decodeParam(text);
+
+	
+		java.util.Date min = com.oliveiracesar.workshopmongo.resources.util.URL.convertDate(minDate,
+				new java.util.Date(0));
+		java.util.Date max = com.oliveiracesar.workshopmongo.resources.util.URL.convertDate(maxDate,
+				new java.util.Date());
+
+		List<Post> list = service.fullSearch(text, min, max);
+		return ResponseEntity.ok().body(list);
+	}
 
 }
