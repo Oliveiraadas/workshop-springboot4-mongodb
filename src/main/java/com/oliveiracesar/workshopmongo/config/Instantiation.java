@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.oliveiracesar.workshopmongo.domain.Post;
 import com.oliveiracesar.workshopmongo.domain.User;
+import com.oliveiracesar.workshopmongo.dto.AuthorDTO;
 import com.oliveiracesar.workshopmongo.repository.PostRepository;
 import com.oliveiracesar.workshopmongo.repository.UserRepository;
 
@@ -37,12 +38,15 @@ public class Instantiation implements CommandLineRunner {
 		User alex = new User(null, "Alex Green", "alex@gmail.com");
 		User bob = new User(null, "Bob Grey", "bob@gmail.com"); 
 		
-		Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "Vou para SP abraço", maria);
-		Post post2 = new Post(null, sdf.parse("21/03/2018"), "Bom dia" ,"Acordei feluz hoje", maria);
-		
 		userRepository.saveAll(List.of(maria, alex, bob));
+		
+		Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "Vou para SP abraço",new AuthorDTO( maria));
+		Post post2 = new Post(null, sdf.parse("21/03/2018"), "Bom dia" ,"Acordei feluz hoje", new AuthorDTO(maria));
+		
+
 		postRepository.saveAll(Arrays.asList(post1, post2));
 		
 		System.out.println("Carga de dados executada com sucesso!");
 	}
 }
+
